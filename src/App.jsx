@@ -1,9 +1,10 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import images from "./assets/images";
 
 
 const App = () => {
-
+    const [darkMode, setDarkMode] = useState(true);
+    
     const [inputValue, setInputValue] = useState('');
     const [items, setItems] = useState(JSON.parse(localStorage.getItem("todos")) || []);
     const [isEditing, setIsEditing] = useState(-1);
@@ -21,7 +22,7 @@ const App = () => {
 
     const deletValue = (index) => {
         const newList= [...items];
-        newList.splice(index, 1)
+        newList.splice(index,1)
         setToStorage(newList);
 
     };
@@ -53,11 +54,18 @@ const App = () => {
         setItems(list);
         localStorage.setItem("todos", JSON.stringify(list));
     }
-    
 
+    useEffect(() => {
+        document.body.style.backgroundColor = darkMode ? "pink" : "white";
+    }, [darkMode]);
 
     return (
-        <div className="container">
+        <>
+
+       
+        <button onClick={() => setDarkMode(prev => !prev)} >{darkMode ? "Light Mode" : "Dark Mode"}</button>
+
+        <div className="container" style={{"backgroundColor": darkMode ? "pink" : "white"}}>
             <div className="heading">
                 <h1>ToDo List</h1>
             </div>
@@ -66,6 +74,7 @@ const App = () => {
             </div>
             <div className="textfield">
                 <input
+                    style={{"backgroundColor": darkMode ? "pink" : "white"}}
                     type="text"
                     value={inputValue}
                     onChange={(e) => setInputValue(e.target.value)}
@@ -96,6 +105,7 @@ const App = () => {
 
             </div>
         </div>
+        </>
     )
 }
 
